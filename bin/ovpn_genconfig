@@ -129,6 +129,10 @@ process_extra_config() {
   [[ -n "$ovpn_extra_config" ]] && echo "$ovpn_extra_config" >> "$TMP_EXTRA_CONFIGFILE"
 }
 
+# Copy vars file
+cp /home/vars /etc/openvpn/vars
+echo "Copied EasyRSA vars file"
+
 if [ "${DEBUG:-}" == "1" ]; then
   set -x
 fi
@@ -172,7 +176,7 @@ OVPN_TLS_CIPHER=''
 [ -r "$OVPN_ENV" ] && source "$OVPN_ENV"
 
 # Parse arguments
-while getopts ":a:e:E:C:T:r:s:du:bcp:n:k:DNm:f:tz2" opt; do
+while getopts ":a:e:E:C:T:r:s:du:bcp:n:k:DNm:f:tz2:" opt; do
     case $opt in
         a)
             OVPN_AUTH="$OPTARG"
@@ -331,13 +335,23 @@ persist-key
 persist-tun
 
 proto $OVPN_PROTO
+max-clients 110
 # Rely on Docker to do port mapping, internally always 1194
 port 1194
 dev $OVPN_DEVICE$OVPN_DEVICEN
-status /tmp/openvpn-status.log
+status /tmp/log/status.log 1
+log-append /tmp/log/log.log
+status-version 2
 
 user nobody
 group nogroup
+explicit-exit-notify 0
+
+auth-user-pass-verify /etc/agent/login via-file
+username-as-common-name
+#duplicate-cn
+script-security 2
+management /tmp/log/openvpn unix
 EOF
 
 if [ "${OVPN_DISABLE_PUSH_BLOCK_DNS}" == "1" ]; then

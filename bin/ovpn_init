@@ -1,0 +1,16 @@
+#!/bin/bash
+
+#
+# Generate OpenVPN configs based on environment variables
+#
+# Delete everything
+rm -rf /etc/openvpn
+
+# Make the new one
+mkdir -p /etc/openvpn
+
+# Setup
+
+ovpn_genconfig -N -C $VPN_CIPHER -s $VPN_SUBNET -u $VPN_URL -a $VPN_AUTH_ALGO
+ovpn_initpki
+easyrsa build-client-full $VPN_NAME nopass

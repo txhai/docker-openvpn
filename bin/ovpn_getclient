@@ -36,7 +36,7 @@ client
 nobind
 dev $OVPN_DEVICE
 remote-cert-tls server
-
+auth SHA256
 remote $OVPN_CN $OVPN_PORT $OVPN_PROTO"
     if [ "$OVPN_PROTO" == "udp6" ]; then
         echo "remote $OVPN_CN $OVPN_PORT udp"
@@ -92,18 +92,18 @@ tls-auth ta.key 1
         echo "auth $OVPN_AUTH"
     fi
 
-    if [ -n "$OVPN_OTP_AUTH" ]; then
-        echo "auth-user-pass"
-        echo "auth-nocache"
-    fi
+    #if [ -n "$OVPN_OTP_AUTH" ]; then
+    #    echo "auth-user-pass"
+    #    echo "auth-nocache"
+    #fi
 
     if [ "$OVPN_COMP_LZO" == "1" ]; then
         echo "comp-lzo"
     fi
 
-    if [ -n "$OVPN_OTP_AUTH" ]; then
-        echo reneg-sec 0
-    fi
+    #if [ -n "$OVPN_OTP_AUTH" ]; then
+    #    echo reneg-sec 0
+    #fi
 }
 
 dir="$OPENVPN/clients/$cn"
