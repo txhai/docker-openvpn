@@ -335,7 +335,7 @@ persist-key
 persist-tun
 
 proto $OVPN_PROTO
-max-clients 110
+max-clients 200
 # Rely on Docker to do port mapping, internally always 1194
 port 1194
 dev $OVPN_DEVICE$OVPN_DEVICEN
