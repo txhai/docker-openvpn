@@ -360,6 +360,11 @@ else
   process_push_config "block-outside-dns"
 fi
 
+if [ "${OVPN_PROTO}" == "udp" ]; then
+  echo "ping 5"
+  echo "ping-exit 10"
+fi
+
 [ -n "$OVPN_TLS_CIPHER" ] && echo "tls-cipher $OVPN_TLS_CIPHER" >> "$conf"
 [ -n "$OVPN_CIPHER" ] && echo "cipher $OVPN_CIPHER" >> "$conf"
 [ -n "$OVPN_AUTH" ] && echo "auth $OVPN_AUTH" >> "$conf"
